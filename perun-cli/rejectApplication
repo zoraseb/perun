@@ -1,0 +1,40 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Getopt::Long qw(:config no_ignore_case);
+use Perun::Agent;
+use Perun::Common qw(printMessage);
+
+sub help {
+	return qq{
+	Rejects Application and sets reason.
+	------------------------------------
+	Available options:
+	--appId   | -i application ID
+	--reason  | -r reason of rejection
+	--batch   | -b batch
+	--help    | -h prints this help
+};
+}
+
+our $batch;
+my ($appId,$reason);
+GetOptions ("help|h"  => sub {
+		print help();
+		exit 0;
+	}, "batch|b"    => \$batch,
+	"appId|i=i"     => \$appId,
+	"reason|r=s"    => \$reason) || die help();
+
+# Check options
+unless (defined $appId) {die "ERROR: appId is required \n";}
+
+my $agent = Perun::Agent->new();
+my $registrarAgent = $agent->getRegistrarAgent;
+
+$registrarAgent->rejectApplication( id => $appId, reason => $reason);
+
+printMessage("Application ID $appId successfully rejected", $batch);
+
+

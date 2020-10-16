@@ -58,4 +58,9 @@ sub updateFormItems
 	return Perun::Common::callManagerMethod('updateFormItems', 'null', @_);
 }
 
+sub rejectApplication
+{
+        return Perun::Common::callManagerMethod('rejectApplication','null',@_);
+}
+
 1;
